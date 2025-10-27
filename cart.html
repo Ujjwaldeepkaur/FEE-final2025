@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart</title>
+<link rel="stylesheet" href="stylesample.css">
+<style>
+  .cart-items {
+    width: 80%;
+    margin: 40px auto;
+  }
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+  }
+  
+  .cart-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .cart-item-info {
+    flex: 1;
+    margin-left: 15px;
+  }
+  .cart-item h3 {
+    margin-bottom: 5px;
+  }
+  .remove-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .remove-btn:hover {
+    background: darkred;
+  }
+  .total {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .proceed, .back-menu, .taste-btn {
+    display: block;
+    width: 220px;
+    margin: 20px auto;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .proceed { background: orangered; }
+  .proceed:hover { background: red; }
+  .back-menu { background: gray; }
+  .back-menu:hover { background: darkgray; }
+  .taste-btn { background: #4CAF50; }
+  .taste-btn:hover { background: #45a049; }
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center;">Your Cart 🛒</h1>
+<!-- Inline banner for messages (no modal/toast) -->
+<div id="message-banner" style="display:none;background:#4CAF50;color:white;padding:10px;text-align:center;width:90%;margin:12px auto;border-radius:6px;"></div>
+<div class="cart-items"></div>
+<div class="total"></div>
+
+<a href="payment.html" class="proceed">Proceed to Payment</a>
+<a href="menu1.html" class="back-menu">← Go Back to Menu</a>
+<a href="taste-recommender.html" class="taste-btn">🍲 Taste Recommender</a>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const container = document.querySelector(".cart-items");
+const totalDiv = document.querySelector(".total");
+const proceedBtn = document.querySelector(".proceed");
+
+function renderCart() {
+  container.innerHTML = "";
+  if (cart.length === 0) {
+    container.innerHTML = "<h3 style='text-align:center;'>Your cart is empty!</h3>";
+    totalDiv.textContent = "";
+    proceedBtn.style.display = "none";
+    localStorage.setItem("cart", JSON.stringify(cart));
+    return;
+  }
+
+  let total = 0;
+  cart.forEach((item, index) => {
+      total += item.price * item.quantity;
+    container.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.image}" alt="${item.name}">
+        <div class="cart-item-info">
+          <h3>${item.name}</h3>
+          <p>₹${item.price} x <input type="number" min="1" value="${item.quantity}" data-index="${index}" class="qty-input" style="width:60px;padding:6px;border-radius:6px;border:1px solid #ccc;"> </p>
+        </div>
+        <button class="remove-btn" data-index="${index}">Remove</button>
+      </div>
+    `;
+  });
+
+  totalDiv.textContent = "Total: ₹" + total;
+  proceedBtn.style.display = "block";
+
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.target.getAttribute("data-index");
+      cart.splice(idx, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+      showBanner('Item removed from cart');
+    });
+  });
+
+  // quantity change handlers
+  document.querySelectorAll('.qty-input').forEach(input => {
+    input.addEventListener('change', (e) => {
+      const idx = parseInt(e.target.getAttribute('data-index'));
+      let val = parseInt(e.target.value) || 1;
+      if(val < 1) val = 1;
+      cart[idx].quantity = val;
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+      showBanner('Quantity updated');
+    });
+  });
+}
+
+renderCart();
+
+// Simple toast helper (shared across pages)
+function showBanner(msg, ms=2000){
+  const b = document.getElementById('message-banner');
+  if(!b) return;
+  b.textContent = msg;
+  b.style.display = 'block';
+  setTimeout(()=>{ b.style.display = 'none'; }, ms);
+}
+</script>
+
+</body>
+</html>
