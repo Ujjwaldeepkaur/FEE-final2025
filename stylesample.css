@@ -1,0 +1,252 @@
+* {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+body {
+  background: white;
+  color: green;
+}
+
+/* Navbar */
+nav {
+  background: white;
+  color: black;
+  /* use viewport units for padding and keep a sensible range with clamp */
+  padding: clamp(10px, 1.6vh, 18px) clamp(16px, 4vw, 50px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  /* responsive font-size */
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: bold;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: black;
+  font-weight: normal;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Basket */
+.cart {
+  position: relative;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: yellow;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+/* Search bar */
+.search-bar input {
+  padding: 9px 14px;
+  border: 1.5px solid white;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.search-bar button {
+  background: white;
+  border: none;
+  border-radius: 5px;
+  padding: 9px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.search-bar button:hover {
+  background: blue;
+}
+
+/* Hero Section */
+.hero {
+  background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90") center center / cover no-repeat;
+  /* use viewport height so hero scales with device height */
+  height: 60vh;
+  width: 90vw;
+  max-width: 1200px;
+  margin: 2vh auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  border-radius: 1.2vh;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.hero h2 {
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: bold;
+  margin-bottom: 1vh;
+}
+.hero p {
+  font-size: clamp(14px, 1.6vw, 20px);
+}
+
+.hero button {
+  background: orangered;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hero button:hover {
+  background: red;
+}
+
+/* Menu Sections */
+.menu-section {
+  padding: clamp(24px, 4vh, 48px) 2vw;
+  text-align: center;
+}
+
+.menu-section h2 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: orangered;
+}
+
+.menu-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2vw, 24px);
+}
+
+/* Card */
+.card {
+  background: white;
+  /* let width scale with viewport but keep usable min and max */
+  width: clamp(220px, 20vw, 320px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  /* keep image aspect ratio responsive */
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  nav {
+    padding: clamp(10px, 1.4vh, 14px) 4vw;
+    font-size: clamp(16px, 2vw, 18px);
+  }
+
+  .hero {
+    height: 50vh;
+    width: 95vw;
+  }
+
+  .hero h2 { font-size: 36px; }
+  .hero p { font-size: 16px; }
+
+  .menu-container { gap: 3vw; }
+  .card { width: clamp(200px, 40vw, 46%); }
+
+  .menu-section { padding: 28px 12px; }
+}
+
+@media (max-width: 600px) {
+  /* stack nav items */
+  nav { flex-direction: column; align-items: flex-start; gap:10px; padding: 12px; }
+  .nav-links { display: flex; flex-direction: column; gap:6px; }
+  .search-bar { width: 100%; display:flex; gap:8px; }
+  .search-bar input { flex:1; }
+
+  /* hero and cards
+     - hero becomes shorter on very small screens
+     - cards become full width stacked vertically
+  */
+  .hero { height: 40vh; width: 96vw; padding: 3vw; }
+  .hero h2 { font-size: clamp(20px, 6vw, 28px); }
+
+  .menu-container { gap: 12px; }
+  .card { width: 100%; }
+  .card img { aspect-ratio: 16/9; }
+
+  /* Adjust fonts
+  */
+  .card h3 { font-size: 18px; }
+  .price { font-size: 16px; }
+
+  /* Cart and checkout areas
+  */
+  .order-summary, .payment-methods, .cart-items, .cart { width: 95%; margin: 12px auto; }
+  .back-cart, .proceed, .taste-btn { width: 90%; margin-left: auto; margin-right: auto; }
+
+  /* Cart item layout: stack vertically */
+  .cart-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .cart-item img { width: 100%; height: 180px; }
+
+  /* Inputs should be full width */
+  input[type="number"], input, select { width: 100%; box-sizing: border-box; }
+
+  /* Payment form and buttons full width */
+  .payment-methods button { width: 100%; }
+}
+
+.card h3 {
+  font-size: 20px;
+  margin: 12px 0 6px;
+}
+
+.card p {
+  font-size: 14px;
+  color: grey;
+  margin-bottom: 10px;
+}
+
+.price {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: orangered;
+  margin-bottom: 15px;
+}
+
+.add-cart {
+  background: orangered;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.add-cart:hover {
+  background: red;
+}
